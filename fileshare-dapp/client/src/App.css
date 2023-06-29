@@ -15,6 +15,11 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+.share {
+  text-align: start !important;
+  background-color: red;
+  margin-right: 5000px;
+}
 
 @keyframes logo-spin {
   from {

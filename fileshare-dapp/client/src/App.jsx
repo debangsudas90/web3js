@@ -4,6 +4,7 @@ import abi from "./artifacts/contracts/Upload.sol/Upload.json"
 import './App.css'
 import FileUpload from './components/FileUpload';
 import Display from './components/Display';
+import Modal from './components/Modal';
 
 function App() {
   const [state, setState] = useState({
@@ -12,7 +13,7 @@ function App() {
   })
 
   const [account, setAccount] = useState("")
-  const [modalOpen, setModalOpen] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     
@@ -22,13 +23,21 @@ function App() {
 
       if(provider) {
 
-        const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
         const contractABI = abi.abi
 
         await provider.send(
           "eth_requestAccounts", []
         )
 
+        window.ethereum.on("chainChanged", () => {
+          window.location.reload()
+        })
+
+        window.ethereum.on("accountsChanged", () => {
+          window.location.reload()
+        })
+        
         const signer = await provider.getSigner()
         const address = await signer.getAddress()
         console.log(address)
@@ -59,20 +68,31 @@ function App() {
 
   return (
     <>
-        <h1 style={{ color: "white" }}>Drive DApp</h1>
-        <div class="bg"></div>
-        <div class="bg bg2"></div>
-        <div class="bg bg3"></div>
+      {!modalOpen && (
+        <button className="share" onClick={() => setModalOpen(true)}>
+          Share
+        </button>
+      )}
+      {modalOpen && (
+        <Modal setModalOpen={setModalOpen} contract={state.contract}></Modal>
+      )}
 
-        <p style={{ color: "white" }}>
-          Account : {account ? account : "Not connected"}
-        </p>
-        <FileUpload
-          account={account}
-          provider={state.provider}
-          contract={state.contract}
-        />
-        <Display contract={state.contract} account={state.account} />
+      <div>
+      <h1 style={{ color: "white" }}>Drive DApp</h1>
+      <div class="bg"></div>
+      <div class="bg bg2"></div>
+      <div class="bg bg3"></div>
+
+      <p style={{ color: "white" }}>
+        Account : {account ? account : "Not connected"}
+      </p>
+      <FileUpload
+        account={account}
+        provider={state.provider}
+        contract={state.contract}
+      />
+      <Display contract={state.contract} account={account} />
+      </div>
     </>
   )
 }

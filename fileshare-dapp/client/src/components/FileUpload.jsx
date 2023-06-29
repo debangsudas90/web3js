@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from "axios"
 import "./FileUpload.css"
 
 const FileUpload = ({contract,account}) => {
@@ -15,7 +16,25 @@ const FileUpload = ({contract,account}) => {
     if(file) {
       try {
         
-        
+        const formData = new FormData()
+        formData.append("file", file);
+
+        const resFile = await axios({
+          method: "post",
+          url: "https://api.pinata.cloud/pinning/pinFileTOIPFS", 
+          data: formData,
+          headers: {
+            pinata_api_key: "1bc36c6f70792f1ffbb4",
+            pinata_secret_api_key: "6daad68b15eeaa4f81892a2b02b3e391a40e007f81bfabe7c1a752e47bdab090",
+            "Content-Type": "multipart/form-data"
+          }
+        })
+
+        const imgHash = `https://gateway.pinata.cloud/ipfs/${resFile.data.IpfsHash}`
+        contract.add(account, imgHash)
+        setFileName(null)
+        setFile(null)
+        alert("Image successfully uploaded")
 
       } catch (error) {
         alert(error)

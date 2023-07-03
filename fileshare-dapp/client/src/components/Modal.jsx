@@ -19,9 +19,11 @@ const Modal = ({setModalOpen, contract}) => {
       for (let i = 0; i < options.length; i++) {
         let opt = options[i];
         let e1 = document.createElement("option")
-        e1.textContent = opt
+        e1.textContent = opt[0]
         e1.value = opt
-        select.appendChild(e1)
+        console.log(opt[1])
+        if(opt[1])
+          select.appendChild(e1)
         
       }
     }

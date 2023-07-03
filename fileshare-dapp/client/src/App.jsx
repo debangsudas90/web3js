@@ -5,6 +5,7 @@ import './App.css'
 import FileUpload from './components/FileUpload';
 import Display from './components/Display';
 import Modal from './components/Modal';
+import Revoke from './components/Revoke';
 
 function App() {
   const [state, setState] = useState({
@@ -14,6 +15,7 @@ function App() {
 
   const [account, setAccount] = useState("")
   const [modalOpen, setModalOpen] = useState(false)
+  const [modalOpenOne, setModalOpenOne] = useState(false)
 
   useEffect(() => {
     
@@ -69,12 +71,20 @@ function App() {
   return (
     <>
       {!modalOpen && (
-        <button className="share" onClick={() => setModalOpen(true)}>
+        <button id="top-button" className='share' onClick={() => setModalOpen(true)}>
           Share
         </button>
       )}
       {modalOpen && (
         <Modal setModalOpen={setModalOpen} contract={state.contract}></Modal>
+      )}
+      {!modalOpenOne && (
+        <button id="top-button" className='share' onClick={() => setModalOpenOne(true)}>
+          Revoke
+        </button>
+      )}
+      {modalOpenOne && (
+        <Revoke setModalOpenOne={setModalOpenOne} contract={state.contract}></Revoke>
       )}
 
       <div>
